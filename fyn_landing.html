@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FYN | Free Guides — Finish Your Now</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:     #0A0A0A;
+    --charcoal:  #1E1E1E;
+    --panel:     #2A2A2A;
+    --mid:       #555555;
+    --grey:      #888888;
+    --silver:    #BBBBBB;
+    --white:     #FFFFFF;
+    --champ:     #B8A898;
+    --champ-lt:  #D8CEC6;
+    --champ-dim: #6B5A52;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--silver);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px 60px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--champ);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(184,168,152,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Decorative corner borders */
+  .corner { position: absolute; width: 40px; height: 40px; }
+  .corner--tl { top: 24px; left: 24px; border-top: 1px solid var(--champ); border-left: 1px solid var(--champ); }
+  .corner--tr { top: 24px; right: 24px; border-top: 1px solid var(--champ); border-right: 1px solid var(--champ); }
+  .corner--bl { bottom: 24px; left: 24px; border-bottom: 1px solid var(--champ); border-left: 1px solid var(--champ); }
+  .corner--br { bottom: 24px; right: 24px; border-bottom: 1px solid var(--champ); border-right: 1px solid var(--champ); }
+
+  .hero__tag {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: var(--champ);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 10vw, 96px);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+
+  .hero__title span {
+    color: var(--champ-lt);
+    font-style: italic;
+  }
+
+  .hero__sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    color: var(--grey);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+
+  .hero__desc {
+    max-width: 520px;
+    font-size: 14px;
+    color: var(--silver);
+    line-height: 1.8;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+  }
+
+  .divider {
+    width: 48px;
+    height: 1px;
+    background: var(--champ);
+    margin: 0 auto 32px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.7s;
+  }
+
+  /* ── GUIDE CARDS ── */
+  .guides {
+    padding: 80px 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .guides__label {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: var(--champ);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 680px) {
+    .cards { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--charcoal);
+    border: 1px solid rgba(184,168,152,0.15);
+    padding: 40px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .card:hover {
+    border-color: rgba(184,168,152,0.4);
+    transform: translateY(-4px);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--champ);
+  }
+
+  .card__num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 300;
+    color: rgba(184,168,152,0.12);
+    position: absolute;
+    top: 12px;
+    right: 24px;
+    line-height: 1;
+  }
+
+  .card__icon { font-size: 28px; margin-bottom: 16px; display: block; }
+
+  .card__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .card__audience {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--champ);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .card__desc {
+    font-size: 13px;
+    color: var(--silver);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .card__bullets {
+    list-style: none;
+    margin-bottom: 32px;
+  }
+
+  .card__bullets li {
+    font-size: 12px;
+    color: var(--grey);
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card__bullets li::before {
+    content: '✦';
+    color: var(--champ);
+    font-size: 8px;
+    flex-shrink: 0;
+  }
+
+  /* ── FORM ── */
+  .form-wrap {
+    background: var(--panel);
+    border: 1px solid rgba(184,168,152,0.2);
+    padding: 24px;
+    margin-top: 4px;
+  }
+
+  .form-wrap p {
+    font-size: 11px;
+    color: var(--grey);
+    margin-bottom: 14px;
+    letter-spacing: 0.05em;
+  }
+
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-row input {
+    background: var(--charcoal);
+    border: 1px solid rgba(184,168,152,0.2);
+    color: var(--white);
+    padding: 12px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .form-row input::placeholder { color: var(--mid); }
+  .form-row input:focus { border-color: var(--champ); }
+
+  .btn {
+    background: var(--champ);
+    color: var(--black);
+    border: none;
+    padding: 14px 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    width: 100%;
+  }
+
+  .btn:hover { background: var(--champ-lt); transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+
+  .form-note {
+    font-size: 10px;
+    color: var(--mid);
+    text-align: center;
+    margin-top: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SUCCESS STATE ── */
+  .success-msg {
+    display: none;
+    background: rgba(184,168,152,0.1);
+    border: 1px solid var(--champ);
+    padding: 20px;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .success-msg p {
+    color: var(--champ-lt);
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  /* ── ABOUT STRIP ── */
+  .about {
+    border-top: 1px solid rgba(184,168,152,0.1);
+    border-bottom: 1px solid rgba(184,168,152,0.1);
+    padding: 64px 24px;
+    text-align: center;
+    background: var(--charcoal);
+  }
+
+  .about__inner { max-width: 580px; margin: 0 auto; }
+
+  .about__label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: var(--champ);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .about__text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--silver);
+    line-height: 1.6;
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+
+  .about__handle {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--champ);
+    text-transform: uppercase;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 32px 24px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  footer p {
+    font-size: 11px;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  footer a {
+    color: var(--champ);
+    text-decoration: none;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="corner corner--tl"></div>
+  <div class="corner corner--tr"></div>
+  <div class="corner corner--bl"></div>
+  <div class="corner corner--br"></div>
+
+  <p class="hero__tag">FYN Online Fitness Coaching</p>
+  <h1 class="hero__title">Finish Your<br><span>Now.</span></h1>
+  <p class="hero__sub">Free Guides — Download Instantly</p>
+  <div class="divider"></div>
+  <p class="hero__desc">
+    Two free guides built for real people with real lives. Whether you're training in a gym or squeezing in 20 minutes between school runs — there's a plan here for you.
+  </p>
+</section>
+
+<!-- ── GUIDE CARDS ── -->
+<section class="guides">
+  <p class="guides__label fade-in">Choose Your Free Guide</p>
+
+  <div class="cards">
+
+    <!-- CARD 1 — General -->
+    <div class="card fade-in">
+      <span class="card__num">01</span>
+      <span class="card__icon">🏋️</span>
+      <h2 class="card__title">Feel Energised.<br>Eat Better.<br>Move More.</h2>
+      <p class="card__audience">For Everyone — Men & Women</p>
+      <p class="card__desc">A 3-day nutrition and gym-based workout plan with macro targets, food foundations, and daily habits to build real lasting energy.</p>
+      <ul class="card__bullets">
+        <li>3 days of balanced meal plans</li>
+        <li>3 full gym workouts — 45 mins</li>
+        <li>Macro targets for men & women</li>
+        <li>FYN Food Foundations explained</li>
+        <li>Evening habits for recovery</li>
+      </ul>
+
+      <div class="form-wrap">
+        <p>Enter your email — we'll send it straight over</p>
+        <div class="form-row">
+          <input type="text" placeholder="Your first name" id="name1">
+          <input type="email" placeholder="Your email address" id="email1">
+          <button class="btn" onclick="submitForm('form1','success1')">Get the Free Guide →</button>
+        </div>
+        <p class="form-note">No spam. Unsubscribe anytime.</p>
+      </div>
+      <div class="success-msg" id="success1">
+        <p>💪 Check your inbox — your guide is on its way!</p>
+      </div>
+    </div>
+
+    <!-- CARD 2 — Busy Mums -->
+    <div class="card fade-in">
+      <span class="card__num">02</span>
+      <span class="card__icon">🏠</span>
+      <h2 class="card__title">No Gym.<br>No Problem.<br>No Excuses.</h2>
+      <p class="card__audience">For Busy Mums — Home Workouts</p>
+      <p class="card__desc">20–30 minute home workouts with zero equipment, quick family-friendly meals, and a plan that fits around your kids — not against them.</p>
+      <ul class="card__bullets">
+        <li>3 home workouts — no equipment</li>
+        <li>Nap time, morning & evening options</li>
+        <li>Quick family-friendly meals</li>
+        <li>Sunday batch cook strategy</li>
+        <li>Self-care habits that actually work</li>
+      </ul>
+
+      <div class="form-wrap">
+        <p>Enter your email — we'll send it straight over</p>
+        <div class="form-row">
+          <input type="text" placeholder="Your first name" id="name2">
+          <input type="email" placeholder="Your email address" id="email2">
+          <button class="btn" onclick="submitForm('form2','success2')">Get the Free Guide →</button>
+        </div>
+        <p class="form-note">No spam. Unsubscribe anytime.</p>
+      </div>
+      <div class="success-msg" id="success2">
+        <p>🏠 Check your inbox — your guide is on its way!</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about">
+  <div class="about__inner fade-in">
+    <p class="about__label">About FYN Coaching</p>
+    <p class="about__text">"These guides are built around real life — not perfect conditions. Consistency always beats intensity. You just have to start."</p>
+    <p class="about__handle">@fyn.fitness_ on Instagram</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>© FYN Online Fitness Coaching &nbsp;·&nbsp; <a href="https://instagram.com/fyn.fitness_" target="_blank">@fyn.fitness_</a> &nbsp;·&nbsp; DM <strong>COACH</strong> to start 1:1 coaching</p>
+</footer>
+
+<script>
+  // ── Scroll fade-in ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 120);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // ── Form submit ──
+  function submitForm(formId, successId) {
+    const card = document.getElementById(successId).closest('.card');
+    const nameInput  = card.querySelector('input[type="text"]');
+    const emailInput = card.querySelector('input[type="email"]');
+    const name  = nameInput.value.trim();
+    const email = emailInput.value.trim();
+
+    if (!name) { nameInput.style.borderColor = '#B8A898'; nameInput.focus(); return; }
+    if (!email || !email.includes('@')) { emailInput.style.borderColor = '#B8A898'; emailInput.focus(); return; }
+
+    // Hide form, show success
+    card.querySelector('.form-wrap').style.display = 'none';
+    const success = document.getElementById(successId);
+    success.style.display = 'block';
+
+    // ── Connect to Mailchimp / Stan / your email tool here ──
+    // Replace the action URL below with your Mailchimp embedded form action URL
+    // or your Stan Store link, or use EmailJS for zero-backend sending
+    console.log('Captured:', name, email);
+
+    // Optional: redirect to PDF download after short delay
+    // setTimeout(() => { window.open('YOUR_PDF_LINK_HERE', '_blank'); }, 1500);
+  }
+</script>
+</body>
+</html>
