@@ -533,7 +533,7 @@
     // ── Connect to Mailchimp / Stan / your email tool here ──
     // Replace the action URL below with your Mailchimp embedded form action URL
     // or your Stan Store link, or use EmailJS for zero-backend sending
-    console.log('Captured:', name, email);
+    fetch('https://formspree.io/f/xvzwjgzo', {method:'POST', mode:'no-cors', body: new URLSearchParams({email: email, name: name})});
 
     // Optional: redirect to PDF download after short delay
     // setTimeout(() => { window.open('YOUR_PDF_LINK_HERE', '_blank'); }, 1500);
